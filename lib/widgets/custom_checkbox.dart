@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 
 class CustomCheckBoxTile extends StatelessWidget {
   const CustomCheckBoxTile(
-      {Key? key, required this.checkValue, required this.title})
+      {Key? key, required this.checkValue, required this.text})
       : super(key: key);
 
   final RxBool checkValue;
-  final String title;
+  final Widget text;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,7 @@ class CustomCheckBoxTile extends StatelessWidget {
                 checkValue.value = !checkValue.value;
               },
             ),
-            Flexible(
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 18),
-              ),
-            )
+            Flexible(child: text)
           ],
         ));
   }

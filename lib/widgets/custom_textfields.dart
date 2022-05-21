@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:map_tutorial/widgets/custom_border.dart';
-import 'package:sizer/sizer.dart';
 
 class SignUpTextfield extends StatefulWidget {
   SignUpTextfield({
@@ -10,11 +9,13 @@ class SignUpTextfield extends StatefulWidget {
     required this.focusNode,
     this.nextFocusNode,
     this.hintText,
+    this.validator,
   }) : super(key: key);
   TextEditingController controller;
   FocusNode focusNode;
   FocusNode? nextFocusNode;
   String? hintText;
+  String? Function(String?)? validator;
 
   @override
   State<SignUpTextfield> createState() => _SignUpTextfieldState();
@@ -33,7 +34,7 @@ class _SignUpTextfieldState extends State<SignUpTextfield> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 1.0.h),
+      margin: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         boxShadow: [
@@ -54,13 +55,7 @@ class _SignUpTextfieldState extends State<SignUpTextfield> {
         focusNode: widget.focusNode,
         controller: widget.controller,
         style: const TextStyle(fontSize: 20),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some value';
-          } else {
-            return null;
-          }
-        },
+        validator: widget.validator,
         textInputAction: widget.nextFocusNode != null
             ? TextInputAction.next
             : TextInputAction.done,
@@ -75,8 +70,7 @@ class _SignUpTextfieldState extends State<SignUpTextfield> {
           filled: true,
           hintText: widget.hintText,
           errorStyle: TextStyle(color: Colors.red, fontSize: 14),
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 2.0.h),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
           hintStyle: const TextStyle(fontSize: 20, color: Colors.grey),
           focusedBorder: CustomBorder.signUpFieldBorder,
           border: CustomBorder.signUpFieldBorder,

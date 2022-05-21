@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:map_tutorial/constants/constants.dart';
 import 'package:map_tutorial/constants/custom_textstyles.dart';
 import 'package:map_tutorial/pages/tutorial_page_2.dart';
-import 'package:sizer/sizer.dart';
 
 class TutorialPage1 extends StatelessWidget {
   const TutorialPage1({Key? key}) : super(key: key);
@@ -28,14 +27,14 @@ class TutorialPage1 extends StatelessWidget {
       ),
       body: Column(
         children: [
-          SizedBox(height: 4.0.h),
+          SizedBox(height: 40),
           Image.asset(locationPermsImage, fit: BoxFit.fitHeight),
-          SizedBox(height: 6.0.h),
+          SizedBox(height: 60),
           const Padding(
             padding: EdgeInsets.all(22.0),
             child: Text(
               'To allow your location permission please click one of the option given in highlighted red border in above picture.',
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.justify,
               style: kTextstyleBlack24,
             ),
           ),

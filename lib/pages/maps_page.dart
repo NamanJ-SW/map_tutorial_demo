@@ -6,7 +6,6 @@ import 'package:map_tutorial/constants/constants.dart';
 import 'package:map_tutorial/constants/custom_textstyles.dart';
 import 'package:map_tutorial/pages/tutorial_page_1.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sizer/sizer.dart';
 
 class MapsPage extends StatefulWidget {
   MapsPage({Key? key, required this.name}) : super(key: key);
@@ -25,12 +24,15 @@ class _MapsPageState extends State<MapsPage> {
 
   getLocationPerms() async {
     await Future.delayed(const Duration(seconds: 1));
+    // if device location is on
     if (await Permission.location.serviceStatus.isEnabled) {
       var status = await Permission.location.status;
+      // if location permission is allowed for the app
       if (status.isGranted) {
         isLocationActive.value = true;
         log('Location perms granted');
       } else if (status.isDenied) {
+        // if location permission is denied for the app
         isLocationActive.value = false;
         Map<Permission, PermissionStatus> status =
             await [Permission.location].request();
@@ -46,6 +48,7 @@ class _MapsPageState extends State<MapsPage> {
         openAppSettings();
       }
     } else {
+      // Checking if device location is off
       Get.to(() => const TutorialPage1());
     }
   }
@@ -76,7 +79,7 @@ class _MapsPageState extends State<MapsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.0.h),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: Text(
                 'Hello ${widget.name ?? 'User'}',
                 style: kTextstyleBlack24.copyWith(fontWeight: FontWeight.bold),
@@ -84,17 +87,20 @@ class _MapsPageState extends State<MapsPage> {
             ),
             Stack(
               children: [
-                Image.asset(
-                  mapsImage,
-                  fit: BoxFit.cover,
-                  height: 60.0.h,
-                  width: 90.0.w,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Image.asset(
+                    mapsImage,
+                    fit: BoxFit.cover,
+                    height: 500,
+                    width: double.infinity,
+                  ),
                 ),
                 Positioned(
-                  right: 0,
+                  right: 20,
                   bottom: 0,
                   child: Padding(
-                    padding: EdgeInsets.only(right: 6.0.w, bottom: 2.0.h),
+                    padding: EdgeInsets.only(right: 20, bottom: 20),
                     child: Obx(
                       () => FloatingActionButton(
                           onPressed: () {

@@ -7,8 +7,9 @@ import 'package:map_tutorial/models/user_info.dart';
 import 'package:map_tutorial/pages/maps_page.dart';
 import 'package:map_tutorial/widgets/custom_checkbox.dart';
 import 'package:map_tutorial/widgets/custom_textfields.dart';
+import 'package:map_tutorial/widgets/field_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -46,9 +47,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
     final Shader _linearGradient = LinearGradient(
       colors: [
         Colors.lightBlueAccent.withOpacity(0.4),
@@ -59,13 +57,11 @@ class _SignUpPageState extends State<SignUpPage> {
     ).createShader(const Rect.fromLTWH(0.0, 0.0, 320.0, 80.0));
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          width: width,
-          height: height,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -73,6 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: <Widget>[
                     Text(
                       'Map Tutorial',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 52,
                           // color: Colors.blue[400],
@@ -80,49 +77,119 @@ class _SignUpPageState extends State<SignUpPage> {
                           fontStyle: FontStyle.italic,
                           foreground: Paint()..shader = _linearGradient),
                     ),
-                    SizedBox(height: 4.0.h),
+                    SizedBox(height: 40),
                     Text(
                       'Sign Up',
                       style: kTextstyleBlue38,
                     ),
-                    SizedBox(height: 4.0.h),
+                    SizedBox(height: 40),
                     SignUpTextfield(
                       controller: nameCtrl,
                       focusNode: nameFocusNode,
                       nextFocusNode: emailFocusNode,
                       hintText: 'name',
+                      validator: (value) =>
+                          FieldValidator().nameValidate(value),
                     ),
                     SignUpTextfield(
                       controller: emailCtrl,
                       focusNode: emailFocusNode,
                       nextFocusNode: pswdFocusNode,
                       hintText: 'e-mail',
+                      validator: (value) =>
+                          FieldValidator().emailValidate(value),
                     ),
                     SignUpTextfield(
                       controller: pswdCtrl,
                       focusNode: pswdFocusNode,
                       nextFocusNode: repeatPswdFocusNode,
                       hintText: 'password',
+                      validator: (value) =>
+                          FieldValidator().passwordValidate(value),
                     ),
                     SignUpTextfield(
                       controller: repeatpswdCtrl,
                       focusNode: repeatPswdFocusNode,
                       hintText: 'repeat password',
+                      validator: (value) => FieldValidator()
+                          .repeatPasswordValidate(value, pswdCtrl.text),
                     ),
-                    SizedBox(height: 2.0.h),
-                    CustomCheckBoxTile(
-                      checkValue: agreeNewsletterCheckbox,
-                      title: 'I agree to receive the Newsletter.',
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomCheckBoxTile(
+                            checkValue: agreeNewsletterCheckbox,
+                            text: Wrap(
+                              children: [
+                                const Text(
+                                  'I agree to receive the ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    String url = 'https://www.google.com';
+                                    if (await canLaunchUrl(Uri.parse(url))) {
+                                      await launchUrl(Uri.parse(url));
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Newsletter.',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,
+                                        decorationThickness: 2.0),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     CustomCheckBoxTile(
                       checkValue: termsAndCondCheckbox,
-                      title:
-                          'I agree to the terms of use, privacy policy, and community guidelines.',
+                      text: Wrap(
+                        children: [
+                          const Text(
+                            'I agree to the ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              String url = 'https://www.google.com';
+                              if (await canLaunchUrl(Uri.parse(url))) {
+                                await launchUrl(Uri.parse(url));
+                              }
+                            },
+                            child: const Text(
+                              'terms',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 2.0,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            ' of use, privacy policy, and community guidelines.',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 4.0.h),
+                    SizedBox(height: 40),
                     SizedBox(
-                      height: 5.0.h,
-                      width: 50.0.w,
+                      height: 50,
+                      width: 200,
                       child: ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
